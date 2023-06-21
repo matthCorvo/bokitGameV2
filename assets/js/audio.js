@@ -1,21 +1,37 @@
 let ENOUAY = new Audio();
-ENOUAY.src = 'assets/music/ENOUAY.wav';
+ENOUAY.src = 'assets/audio/ENOUAY.wav';
 
 let hmmm = new Audio();
-hmmm.src = 'assets/music/hmm.wav';
+hmmm.src = 'assets/audio/hmm.wav';
 
+document.addEventListener("DOMContentLoaded", function() {
+  // SELECT SOUND ELEMENT
+  const soundElement = document.getElementById("sound");
 
-// SELECT SOUND ELEMENT
-const soundElement  = document.getElementById("sound");
+  soundElement.addEventListener("click", toggleSoundImage);
 
-soundElement.addEventListener("click", audioManager);
-
-function audioManager(){
+  function toggleSoundImage() {
     // CHANGE IMAGE SOUND_ON/OFF
     let imgSrc = soundElement.getAttribute("src");
-    let SOUND_IMG = imgSrc == "assets/img/SOUND_ON.png" ? "assets/img/SOUND_OFF.png" : "assets/img/SOUND_ON.png";
+    let SOUND_ON_IMG = "../img/SOUND_ON.png";
+    let SOUND_OFF_IMG = "assets/img/SOUND_OFF.png";
+
+    if (imgSrc === SOUND_ON_IMG ) {
+      soundElement.setAttribute("src", SOUND_OFF_IMG);
+      disableSound();
+    } else {
+      soundElement.setAttribute("src", SOUND_ON_IMG);
+      enableSound();
+    }}
     
-    soundElement.setAttribute("src", SOUND_IMG);
-  // MUTE AND UNMUTE SOUNDS
-  ENOUAY.muted = ENOUAY.muted ? false : true;
+
+  function enableSound() {
+    ENOUAY.muted = false;
+    hmmm.muted = false;
   }
+
+  function disableSound() {
+    ENOUAY.muted = true;
+    hmmm.muted = true;
+  }
+});

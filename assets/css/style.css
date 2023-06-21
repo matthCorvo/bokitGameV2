@@ -87,6 +87,13 @@ span{color:rgb(22, 27, 22)}
   align-items:center;
   justify-content:center;
 }
+.control-container1{
+ display: flex;
+  align-items:center;
+  justify-content:center;
+  margin-top: 4rem;
+  visibility: hidden;
+}
 
 button{
 padding:0.5em 1.3em;
@@ -112,6 +119,10 @@ cursor: pointer;
 .reset{background-color:rgb(250, 111, 61);
 }
 
+ .diff_btn {
+  margin-bottom:1rem;
+}
+
 .difficulty-container {
   display: inline-block;
 }
@@ -124,6 +135,16 @@ cursor: pointer;
 }
 
 #menuItems{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) !important;
+  background:rgba(255, 255, 255, 0.836);
+  text-align: center;
+  padding: 1rem;
+  border: 1px rgba(0,0,0,0.6) solid;
+}
+.menu{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -235,7 +256,7 @@ footer{
   .container {
 font-size: 8px;  }
 
-.control-container h4{font-size: 0.9rem;}
+.control-container1 h4, .control-container h4{font-size: 0.9rem;}
 
 }
 

@@ -27,7 +27,7 @@
 
       </div>
       <br>
-      <h2 class="title-timer">Temps <span class="timer">45</span></h2>
+      <h2 class="title-timer">Temps <span class="timer">50</span></h2>
       <h2 class="title-score">Bokits attrapés <span class="score">0</span></h2>
       <h2 class="title-no_bokits">Bokits vendus <span class="no_bokit">0</span></h2>
    
@@ -35,7 +35,7 @@
     <div class="grid">
       <div class="row">
         <div class="square">
-          <img src="assets/img/mole.png" class="bokits" class="play" onmousedown="hmmm.play()" id="1">
+          <img src="assets/img/mole.png" class="bokits " class="play" onmousedown="hmmm.play()" id="1">
           <img src="assets/img/camion-.png" class="hole">
         </div>
         <div class="square">
@@ -77,10 +77,9 @@
       </div>
     </div>
     
-    <div id="menuItems">
+    <div id="menuItems" >
       <img src="assets/img/logoHome.png" class="logoHome">
-      <button>
-
+      <button class="diff_btn">
         <div class="difficulty-container">
           <select id="difficulty">
             <option value="Easy"><h4>Facile</h4></option>
@@ -91,16 +90,38 @@
         </div>
       </button>
       <div class="control-container">
-        <button class="play" onmousedown="ENOUAY.play()"><i class="fa-solid fa-play"></i></button>
-        <button class="reset"> <i class="fa-solid fa-stop"></i>  </button>
+        <button id="play" class="play" onmousedown="ENOUAY.play()"><i class="fa-solid fa-play"></i></button>
         <div class="sound">
-          <img src="assets/img/SOUND_ON.png" alt="" onmousedown="ENOUAY.play()" >
+           <img src="assets/img/SOUND_ON.png" alt=""  id="sound" >
         </div>
       </div>
     </div>
+
+      <div id="endScreen" class="menu" style="display:none">
+        <img src="assets/img/logoHome.png" class="logoHome">
+        <div id="scoreValue">
+          <input type="text" id="name"
+          placeholder="Insérer votre nom">
+          <br>
+          <br>
+          <button onclick="saveScore()" id="saveBtn">Sauvegarder</button>
+        <button onclick="showScore()">Afficher le score</button>
+      <button onclick="showMenu()">Menu</button>
+      </div>
+    </div>
+
+      <div id="idscoreScreen" class="menu" style="display:none">
+        <img src="assets/img/logoHome.png" class="logoHome">
+        <div id="scoreContainer"></div>
+          <br>
+          <button onclick="closeScores()">Retour</button>
+      </div>
   
   </div>
-
+  <div class="control-container1" id="control-btn1">
+    <button class="reset"> <i class="fa-solid fa-rotate-right"></i> </button>
+   
+  </div>
   <footer>
     <div style="text-align: center;font-size: 17px;">
       <div style="justify-content: space-between;">
@@ -140,7 +161,12 @@
       </div>
     </div>    
   </footer>
+  <script>
+    
+  </script>
   <script src="assets/js/audio.js"></script>
+  <script src="assets/js/menu.js"></script>
+
   <script src="assets/js/select.js"></script>
 </body>
 </html>

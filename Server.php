@@ -46,7 +46,7 @@ class Score {
         $stmt = $conn->prepare($query);
         $stmt->bindValue(':difficulty', $difficulty);
         $stmt->execute();
-        $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $scores = $stmt->fetchAll(PDO::FETCH_OBJ);
         return $scores;
     }
 
@@ -84,24 +84,32 @@ $db_name = "bokit";
 $db = new Database($db_host, $db_user, $db_password, $db_name);
 $db->connect();
 
-// Création de l'objet Score
 $score = new Score($db);
 
-// Récupération de tous les scores
-$result = $score->getAllScores();
+// Assuming $score is an instance of the Score class
 
-if(isset($_POST["data"])) {
-   $data=json_decode($_POST['data'],true);
-   if(addScores($data)){
+if (isset($_POST["data"])) {
+    $data = json_decode($_POST['data'], true);
+    $score->addScores($data);
     echo "score inserted";
-   }else{
-    echo"eeeeeeee";
-   }
-   }else{
-    $result=getAllScores($db);
-    echo json_encode($result);
-   }
-   
-   
+} else {
+    $result = $score->getAllScores();
+    $formattedResult = [];
+
+    foreach ($result as $difficulty => $scores) {
+        $formattedScores = [];
+        foreach ($scores as $score) {
+            $formattedScores[] = [
+                "Name" => $score->Name,
+                "Bokits" => $score->Bokits,
+                "Difficulty" => $difficulty
+            ];
+        }
+        $formattedResult[$difficulty] = $formattedScores;
+    }
+
+    echo json_encode($formattedResult);
+}
 
 ?>
+
