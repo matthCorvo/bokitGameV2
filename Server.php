@@ -1,12 +1,20 @@
 <?php
+require_once 'db/config.php';
+
+$database = new Database($db_host, $db_user, $db_password, $db_name);
 class Database {
-    private $db_host = "localhost";
-    private $db_user = "root";
-    private $db_password = "";
-    private $db_name = "bokit";
+    private $db_host;
+    private $db_user;
+    private $db_password;
+    private $db_name;
     private $conn;
 
-    public function __construct() {
+    public function __construct($db_host, $db_user, $db_password, $db_name) {
+        $this->db_host = $db_host;
+        $this->db_user = $db_user;
+        $this->db_password = $db_password;
+        $this->db_name = $db_name;
+
         $this->conn = new mysqli($this->db_host, $this->db_user, $this->db_password, $this->db_name);
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
@@ -26,8 +34,8 @@ class Database {
 class Score {
     private $db;
 
-    public function __construct() {
-        $this->db = new Database();
+    public function __construct($db_host, $db_user, $db_password, $db_name) {
+        $this->db = new Database($db_host, $db_user, $db_password, $db_name);
     }
 
     public function getDb() {
@@ -117,7 +125,7 @@ class Score {
     
     
 }
-$scoreObj = new Score();
+$scoreObj = new Score($db_host, $db_user, $db_password, $db_name);
 
 // Handle the score submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -127,7 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $scoresData = $scoreObj->fetchScores();
         echo json_encode($scoresData);
     } else {
-        echo "Failed to add scores.";
+        echo "Failed to add sc
+ores.";
     }
 } else {
     // Fetch scores
