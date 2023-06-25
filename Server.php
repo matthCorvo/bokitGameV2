@@ -1,33 +1,24 @@
 <?php
-// Classe pour gérer la connexion à la base de données
 class Database {
-    private $host;
-    private $username;
-    private $password;
-    private $dbname;
-    private $pdo;
+    private $db_host = "localhost";
+    private $db_user = "root";
+    private $db_password = "";
+    private $db_name = "bokit";
+    private $conn;
 
-    public function __construct($host, $username, $password, $dbname) {
-        $this->host = $host;
-        $this->username = $username;
-        $this->password = $password;
-        $this->dbname = $dbname;
-    }
-
-    // Méthode pour se connecter à la base de données
-    public function connect() {
-        try {
-            $dsn = "mysql:host=$this->host;dbname=$this->dbname";
-            $this->pdo = new PDO($dsn, $this->username, $this->password);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("Échec de la connexion à la base de données: " . $e->getMessage());
+    public function __construct() {
+        $this->conn = new mysqli($this->db_host, $this->db_user, $this->db_password, $this->db_name);
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
         }
     }
 
-    // Méthode pour obtenir l'objet PDO de la connexion
-    public function getPDO() {
-        return $this->pdo;
+    public function getConnection() {
+        return $this->conn;
+    }
+
+    public function closeConnection() {
+        $this->conn->close();
     }
 }
 
@@ -35,81 +26,115 @@ class Database {
 class Score {
     private $db;
 
-    public function __construct($db) {
-        $this->db = $db;
+    public function __construct() {
+        $this->db = new Database();
     }
+
+    public function getDb() {
+        return $this->db;
+    }
+
 
     // Méthode pour obtenir les scores avec une difficulté spécifique
     public function getScoresWithDifficulty($difficulty) {
-        $conn = $this->db->getPDO();
-        $query = "SELECT Name Bokits FROM Scores WHERE Difficulty LIKE :difficulty";
+        $conn = $this->db->getConnection();
+        $query = "SELECT Name, Bokits FROM Scores WHERE Difficulty LIKE ?";
         $stmt = $conn->prepare($query);
-        $stmt->bindValue(':difficulty', $difficulty);
+        $stmt->bind_param("s", $difficulty);
         $stmt->execute();
-        $scores = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->get_result();
+    
+        $scores = [];
+        while ($row = $result->fetch_assoc()) {
+            $scores[] = [
+                "Name" => $row["Name"],
+                "Bokits" => $row["Bokits"]
+            ];
+        }
         return $scores;
     }
+    
 
     // Méthode pour obtenir tous les scores pour différentes difficultés
     public function getAllScores() {
-        $easy = $this->getScoresWithDifficulty('Facile');
-        $medium = $this->getScoresWithDifficulty('Normal');
-        $hard = $this->getScoresWithDifficulty('Difficile');
-        $insane = $this->getScoresWithDifficulty('ULTRA');
-        return ["Facile" => $easy, "Normal" => $medium, "Difficile" => $hard, "ULTRA" => $insane];
+        $difficulties = ["facile", "normal", "difficile", "ULTRA"];
+        $result = [];
+        foreach ($difficulties as $difficulty) {
+            $scores = $this->getScoresWithDifficulty($difficulty);
+            $formattedScores = [];
+            foreach ($scores as $score) {
+                $formattedScores[] = $score;
+            }
+            $result[$difficulty] = $formattedScores;
+        }
+        return $result;
     }
+    
+    
 
-    // Méthode pour ajouter  les scores   
+    // Méthode pour ajouter les scores   
     public function addScores($data) {
-        $conn = $this->db->getPDO();
-        $query = $conn->prepare("INSERT INTO Scores (`Name`,`Bokits`,`Difficulty`) VALUES (:Name, :Bokits, :Difficulty)");
-       
-                // EXECUTION
-         // htmlspecialchars = protection
-         $query->bindValue('Name',htmlspecialchars($data['Name']));
-         $query->bindValue('Bokits',htmlspecialchars($data['Bokits']));
-         $query->bindValue('Difficulty',htmlspecialchars($data['Difficulty']));
+        $conn = $this->db->getConnection();
+        $query = $conn->prepare("INSERT INTO Scores (`Name`, `Bokits`, `Difficulty`) VALUES (?, ?, ?)");
 
-         $query->execute();
+        // Bind the parameters with their respective values
+        $query->bind_param( "sss", $data['Name'], $data['Bokits'], $data['Difficulty']);
+        
+        $query->execute();
 
+        // Check if the insertion was successful
+        if ($query->affected_rows > 0) {
+            return true; // Data was successfully added
+        } else {
+            return false; // Failed to add data
         }
-}
-// Configuration de la base de données
-$db_host = "localhost";
-$db_user = "root";
-$db_password = "";
-$db_name = "bokit";
-
-// Création de l'objet de connexion à la base de données
-$db = new Database($db_host, $db_user, $db_password, $db_name);
-$db->connect();
-
-$score = new Score($db);
-
-// Assuming $score is an instance of the Score class
-
-if (isset($_POST["data"])) {
-    $data = json_decode($_POST['data'], true);
-    $score->addScores($data);
-    echo "score inserted";
-} else {
-    $result = $score->getAllScores();
-    $formattedResult = [];
-
-    foreach ($result as $difficulty => $scores) {
-        $formattedScores = [];
-        foreach ($scores as $score) {
-            $formattedScores[] = [
-                "Name" => $score->Name,
-                "Bokits" => $score->Bokits,
-                "Difficulty" => $difficulty
-            ];
-        }
-        $formattedResult[$difficulty] = $formattedScores;
     }
-
-    echo json_encode($formattedResult);
+    public function fetchScores() {
+        $conn = $this->db->getConnection();
+        $query = "SELECT * FROM Scores ORDER BY Difficulty, Bokits DESC";
+        $result = $conn->query($query);
+    
+        if ($result && $result->num_rows > 0) {
+            $scores = [];
+    
+            while ($row = $result->fetch_assoc()) {
+                $difficulty = $row['Difficulty'];
+                $name = $row['Name'];
+                $bokits = $row['Bokits'];
+    
+                $scores[] = [
+                    "Difficulty" => $difficulty,
+                    "Name" => $name,
+                    "Bokits" => $bokits
+                ];
+            }
+    
+            return $scores;
+        } else {
+            return [];
+        }
+    }
+    
+    
 }
+$scoreObj = new Score();
+
+// Handle the score submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if ($scoreObj->addScores($data)) {
+        $scoresData = $scoreObj->fetchScores();
+        echo json_encode($scoresData);
+    } else {
+        echo "Failed to add scores.";
+    }
+} else {
+    // Fetch scores
+    $scoresData = $scoreObj->fetchScores();
+    echo json_encode($scoresData);
+}
+
+
 
 ?>
-

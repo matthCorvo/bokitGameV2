@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function() {
   function toggleSoundImage() {
     // CHANGE IMAGE SOUND_ON/OFF
     let imgSrc = soundElement.getAttribute("src");
-    let SOUND_ON_IMG = "../img/SOUND_ON.png";
-    let SOUND_OFF_IMG = "assets/img/SOUND_OFF.png";
+    let SOUND_ON_IMG = "./assets/img/SOUND_ON.png";
+    let SOUND_OFF_IMG = "./assets/img/SOUND_OFF.png";
 
     if (imgSrc === SOUND_ON_IMG ) {
       soundElement.setAttribute("src", SOUND_OFF_IMG);

@@ -27,7 +27,7 @@
 
       </div>
       <br>
-      <h2 class="title-timer">Temps <span class="timer">50</span></h2>
+      <h2 class="title-timer">Temps <span id="time" class="timer">1</span></h2>
       <h2 class="title-score">Bokits attrapés <span class="score">0</span></h2>
       <h2 class="title-no_bokits">Bokits vendus <span class="no_bokit">0</span></h2>
    
@@ -83,7 +83,7 @@
         <div class="difficulty-container">
           <select id="difficulty">
             <option value="Easy"><h4>Facile</h4></option>
-            <option value="Normal"><h4>Moyen</h4></option>
+            <option value="Normal"><h4>Normal</h4></option>
             <option value="Difficulty"><h4>Difficile</h4></option>
             <option value="Insane"><h4>ULTRA</h4></option>
           </select>
@@ -91,36 +91,33 @@
       </button>
       <div class="control-container">
         <button id="play" class="play" onmousedown="ENOUAY.play()"><i class="fa-solid fa-play"></i></button>
-        <div class="sound">
-           <img src="assets/img/SOUND_ON.png" alt=""  id="sound" >
-        </div>
+          <button id="control-btn1"class="reset"> <i class="fa-solid fa-rotate-right"></i> </button>
+          <div >
+           <img id="sound" src="assets/img/SOUND_ON.png" class="sound" alt=""   >
+
+          </div>
       </div>
     </div>
 
       <div id="endScreen" class="menu" style="display:none">
         <img src="assets/img/logoHome.png" class="logoHome">
-        <div id="scoreValue">
+        <div id="scoreValue"></div>
           <input type="text" id="name"
-          placeholder="Insérer votre nom">
-          <br>
-          <br>
-          <button onclick="saveScore()" id="saveBtn">Sauvegarder</button>
-        <button onclick="showScore()">Afficher le score</button>
-      <button onclick="showMenu()">Menu</button>
-      </div>
+          placeholder="Insérer votre nom" >
+     
+          <button onclick="saveScore()" id="saveBtn" >Sauvegarder</button>
+        <button onclick="showScores()">Afficher le score</button>
+      <button onclick="showMenu()">Rejouer</button>
     </div>
 
-      <div id="idscoreScreen" class="menu" style="display:none">
+      <div id="scoresScreen" class="menu" style="display:none">
         <img src="assets/img/logoHome.png" class="logoHome">
-        <div id="scoreContainer"></div>
+        <div id="scoresContainer"></div>
+
           <br>
           <button onclick="closeScores()">Retour</button>
       </div>
   
-  </div>
-  <div class="control-container1" id="control-btn1">
-    <button class="reset"> <i class="fa-solid fa-rotate-right"></i> </button>
-   
   </div>
   <footer>
     <div style="text-align: center;font-size: 17px;">
@@ -161,12 +158,8 @@
       </div>
     </div>    
   </footer>
-  <script>
-    
-  </script>
-  <script src="assets/js/audio.js"></script>
-  <script src="assets/js/menu.js"></script>
 
+  <script src="assets/js/audio.js"></script>
   <script src="assets/js/select.js"></script>
 </body>
 </html>

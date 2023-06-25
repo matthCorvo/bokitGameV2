@@ -92,7 +92,7 @@ span{color:rgb(22, 27, 22)}
   align-items:center;
   justify-content:center;
   margin-top: 4rem;
-  visibility: hidden;
+  display: none;
 }
 
 button{
@@ -143,6 +143,7 @@ cursor: pointer;
   text-align: center;
   padding: 1rem;
   border: 1px rgba(0,0,0,0.6) solid;
+  background-color: #ffffff;
 }
 .menu{
   position: absolute;
@@ -153,6 +154,8 @@ cursor: pointer;
   text-align: center;
   padding: 1rem;
   border: 1px rgba(0,0,0,0.6) solid;
+  background-color: #ffffff;
+
 }
 
 .bokits{transform:scale(1,0);}
@@ -171,13 +174,34 @@ margin-bottom: 1rem;
 width: 80%;
 }
 
-/* SON */
-
-.sound img{
-  cursor: pointer;
-  width: 75%;
+ button:disabled{
+cursor: default;
+color: gray;
+background: lightgray;
+}
+#scoresContainer{
+  overflow: auto;
+  height: 43vh;
 }
 
+#SaveBtn:disabled{
+background:lightgray
+}
+.menu{
+margin-bottom: 1.5rem;
+}
+/* SON */
+
+.sound {
+  cursor: pointer;
+  width: 80px;
+}
+
+@media only screen and (max-width: 740px) {
+.sound {
+  cursor: pointer;
+  width: 45px;
+}}
 
 /* Greeting Modal Container */
 #greeting-modal {
