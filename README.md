@@ -1,3 +1,2 @@
 # BokitGame
-Le principe : toucher les bokits qui aparaissent ! Une fois le temps écoulé, les scores s'affichent sur l'unité de jeu. Attention baissez le son avant de jouer.
-
+Jeu développé en JavaScript et PHP. Touchez les bokits (sandwichs) qui apparaissent à l'écran ! Une fois que le temps imparti s'est écoulé, les scores sont affichés à l'écran pour évaluer vos performances. 
