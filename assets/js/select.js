@@ -170,7 +170,7 @@ function saveScore() {
   };
 
   // Send a POST request to the server to save the score
-  fetch('Server.php', {
+  fetch('server.php', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -273,7 +273,7 @@ function handleRetourClick() {
 
 // Function to fetch and display the scores
 function getScores() {
-  fetch('Server.php')
+  fetch('server.php')
     .then(function (response) {
       return response.json();
     })
