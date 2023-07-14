@@ -1,6 +1,6 @@
 # Jeu Attrape Bokits
 
-Le jeu Bokits est un jeu web simple où les joueurs doivent cliquer sur des bokits en mouvement pour marquer des points. Le jeu utilise JavaScript pour le frontend et PHP avec MySQL pour le backend afin de stocker et récupérer les scores.
+Le jeu Bokits est un jeu web simple où les joueurs doivent cliquer sur des bokits en mouvement pour marquer des points. Le jeu utilise JavaScript et PHP avec MySQL afin de stocker et récupérer les scores.
 
 ## Fonctionnalités
 
